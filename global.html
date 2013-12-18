@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Include as global</title>
+</head>
+<body>
+	<a href="#">Index</a><br>
+	<a href="#test/1">Test</a>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.js"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore.js"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.0/backbone.js"></script>
+	<script type="text/javascript" src="js/backbone.responsiverouter.js"></script>
+	<script type="text/javascript">
+		var Router = Backbone.ResponsiveRouter.extend({
+			routes: {
+				"":         "index",
+				"test/:id":     "test"
+			},
+			index: function (media) {
+				console.log('index', media);
+				if(this.isMobile()) {
+					console.log('mobile');
+				} else if(this.isTablet()) {
+					console.log('tablet');
+				} else if(this.isLaptop()) {
+					console.log('laptop');
+				} else if(this.isDesktop()) {
+					console.log('desktop');
+				}
+			},
+			test: function (id) {
+				console.log('test', id, this.media);
+			}
+		});
+
+		var testrouter = new Router({watch: true});
+
+		console.log('matched', testrouter.getMatchedMedia());
+
+		Backbone.history.start();
+
+		console.log(testrouter);
+		console.log('mobile', testrouter._matchMedia('mobile'));
+		console.log('tablet', testrouter._matchMedia('tablet'));
+		console.log('laptop', testrouter._matchMedia('laptop'));
+		console.log('desktop', testrouter._matchMedia('desktop'));
+	</script>
+</body>
+</html>

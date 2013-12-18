@@ -1,0 +1,23 @@
+{
+  "name": "ResponsiveRouter",
+  "version": "0.0.0",
+  "description": "Extending the normal Backbone.js Router to include some responsive features to execute different logic based on route and also view port size.",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ricwa230/backbone.responsiverouter.git"
+  },
+  "author": "Richard Wålander",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ricwa230/backbone.responsiverouter/issues"
+  },
+  "homepage": "https://github.com/ricwa230/backbone.responsiverouter",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-release": "~0.6.0",
+    "grunt-contrib-testem": "~0.5.13",
+    "grunt-contrib-uglify": "~0.2.7",
+    "grunt-contrib-jshint": "~0.7.2",
+    "grunt-contrib-copy": "~0.4.1"
+  }
+}

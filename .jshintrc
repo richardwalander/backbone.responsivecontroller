@@ -1,0 +1,19 @@
+{
+	"browser": true,
+	"esnext": true,
+	"globalstrict": true,
+	"quotmark": true,
+	"trailing": true,
+	"undef": true,
+	"unused": true,
+	"indent": 4,
+	"laxcomma": true,
+	"globals": {
+		"require": true,
+		"requirejs": true,
+		"module": true,
+		"describe": true,
+		"it": true,
+		"define": true
+	}
+}
