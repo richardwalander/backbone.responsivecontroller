@@ -51,13 +51,13 @@ breakpoints: {
 If you wish to just get ResponsiveRouter in your project, you need at the minimum Backbone, Underscore, and jQuery. Your HTML should look something like this:
 
 ```html
-<!-- Dependencies. -->
+<!-- Dependencies -->
 <script src="jquery.js"></script>
 <script src="underscore.js"></script>
 <script src="backbone.js"></script>
 
-<!-- LayoutManager. -->
-<script src="backbone.layoutmanager.js"></script>
+<!-- ResponsiveRouter -->
+<script src="backbone.responsiverouter.js"></script>
 ```
 If you want to use a dependency manager like RequireJS.
 
