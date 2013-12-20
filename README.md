@@ -1,4 +1,4 @@
-backbone.responsiverouter
+Backbone.ResponsiveRouter
 =========================
 
 Maintaind by [Richard Wålander](http://www.richardwalander.com)
@@ -17,7 +17,7 @@ So what options do you have if you want the experience to be different on differ
 
 The problem with a non-responsive-desing solution is that you often end up with many different projects/code-bases for different devices and in the end maintenance hell! Another problem is that some of the views work 100% for all sizes and then you don't want to re-implement that in all your versions of your web app.
 
-The Solution
+The solution
 ============
 
 So how can we still use the power of media queries but now for our JavaScript code? To solve this issue especially for `Backbone.js` applications I extended the normal `Backbone.Router` with some responsive features for your to use in your routes to handle different media query break points. With this you can write custom logic or even render completely different views based on viewport size.
@@ -29,21 +29,63 @@ The `ResponsiveRouter` uses `window.matchMedia` to match any breakpoints you def
 When you create a new instance of the `ResponsiveRouter` it will come with some pre-defined breakpoints and it will automatically see witch one is matched. Because I use [Twitter Bootstrap](http://getbootstrap.com) a lot in my applications the default breakpoints try to follow their grid system breakpoints. These are the default breakpoints:
 
  ```javascript
- breakpoints: {
-	'mobile': {
+breakpoints: {
+	'mobile': { //(min-width: 0px) and (max-width: 480px)
 		'start': 0,
 		'end': 480
 	},
-	'tablet': {
+	'tablet': { //(min-width: 481px) and (max-width: 768px)
 		'start': 481,
 		'end': 768
 	},
-	'laptop': {
+	'laptop': { //(min-width: 769px) and (max-width: 1170px)
 		'start': 769,
 		'end': 1170
 	},
-	'desktop': {
+	'desktop': { //(min-width: 1171px)
 	'start': 1171
 	}
 },
  ```
+ 
+### Example usage
+```javascript
+var Router = Backbone.ResponsiveRouter.extend({
+...
+	breakpoints: {
+		'mobile': { //(min-width: 0px) and (max-width: 480px)
+			'start': 0,
+			'end': 480
+		},
+		'tablet': { //(min-width: 481px) and (max-width: 768px)
+			'start': 481,
+			'end': 768
+		},
+		'laptop': { //(min-width: 769px) and (max-width: 1170px)
+			'start': 769,
+			'end': 1170
+		},
+		'desktop': { //(min-width: 1171px)
+		'start': 1171
+		}
+	},
+
+	routes: {
+		"":                 "index",
+		"search/:query":        "search",
+	},
+	
+	index: function () {
+		if(this.media == 'mobile') {
+			new MobileView();
+		} else {
+			new NormalView();
+		}
+	},
+...
+});
+
+var router = new Router();
+
+Backbone.history.start();
+```
