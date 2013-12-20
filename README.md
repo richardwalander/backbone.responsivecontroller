@@ -24,7 +24,7 @@ So how can we still use the power of media queries but now for our JavaScript co
 
 How does it work?
 =================
-The `ResponsiveRouter` uses `window.matchMedia` to match any breakpoints you define for your application. In this way you can use the same breakpoints for responsive CSS3 functionality as well as responsive JavaScript functionality. `window.matchMedia` has fairly good browser support but the `ResponsiveRouter` includes [polyfills](https://github.com/paulirish/matchMedia.js/) for legacy browsers.
+The `ResponsiveRouter` uses `window.matchMedia` to match any breakpoints you define for your application. In this way you can use the same breakpoints for responsive CSS3 functionality as well as responsive JavaScript functionality. `window.matchMedia` has fairly good browser support (Chrome since m10, Firefox since 6, and Safari since 5.1, IE10), but the `ResponsiveRouter` includes [polyfills](https://github.com/paulirish/matchMedia.js/) for legacy browsers and IE6-9.
 
 When you create a new instance of the `ResponsiveRouter` it will come with some pre-defined breakpoints and it will automatically see witch one is matched. Because I use [Twitter Bootstrap](http://getbootstrap.com) a lot in my applications the default breakpoints try to follow their grid system breakpoints. These are the default breakpoints:
 
@@ -47,8 +47,57 @@ breakpoints: {
 	}
 },
  ```
- 
-### Example usage
+### Installation
+If you wish to just get ResponsiveRouter in your project, you need at the minimum Backbone, Underscore, and jQuery. Your HTML should look something like this:
+
+```html
+<!-- Dependencies. -->
+<script src="jquery.js"></script>
+<script src="underscore.js"></script>
+<script src="backbone.js"></script>
+
+<!-- LayoutManager. -->
+<script src="backbone.layoutmanager.js"></script>
+```
+If you want to use a dependency manager like RequireJS.
+
+Make sure your configuration looks very similar to this:
+
+```javascript
+require.config({
+  // Ensure that RequireJS knows the paths to your dependencies.
+  paths: {
+    jquery: "/path/to/jquery",
+    backbone: "/path/to/backbone",
+    underscore: "/path/to/underscore",
+    responsiverouter: "/path/to/backbone.responsiverouter"
+  },
+
+  // Help RequireJS load Backbone with shim.
+  shim: {
+    backbone: {
+      deps: ["jquery", "underscore"],
+      exports: "Backbone"
+    }
+  }
+});
+```
+
+Then you can require it and use it.
+
+```javascript
+define(function (require) {
+	var ResponsiveRouter = require('responsiverouter');
+	
+	var Router = ResponsiveRouter.extend({
+		...
+	});
+	
+	return Router;
+});
+```
+
+### Basic usage
 ```javascript
 var Router = Backbone.ResponsiveRouter.extend({
 ...
@@ -89,3 +138,9 @@ var router = new Router();
 
 Backbone.history.start();
 ```
+
+### Advanced usage
+Read [the documentation here](https://github.com/ricwa230/backbone.responsiverouter/wiki)
+
+### Issues and bugs
+If you find some issue or think some functionality is missing please let me know by [creating and issue here](https://github.com/ricwa230/backbone.responsiverouter/issues). To help me as much as possible it would be nice if you could create a basic simplified [jsFiddle](http://jsfiddle.net) that illustrates the issue and attach that in the issue description.
