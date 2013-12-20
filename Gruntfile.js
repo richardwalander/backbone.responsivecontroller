@@ -1,16 +1,29 @@
+'use strict';
 module.exports = function(grunt) {
-	'use strict';
+
+	var semver = require( 'semver' );
 
 	// Project configuration.
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
 		uglify: {
-			options: {
-				banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+			dev: {
+				options: {
+					banner: '/*! <%= pkg.name %> v<%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
+					beautify: true,
+					mangle: false
+				},
+				files: {
+					'dist/backbone.responsiverouter.js': ['js/backbone.responsiverouter.js']
+				}
 			},
-			build: {
-				src: 'js/backbone.responsiverouter.js',
-				dest: 'dist/backbone.responsiverouter.min.js'
+			min: {
+				options: {
+					banner: '/*! <%= pkg.name %> v<%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+				},
+				files: {
+					'dist/backbone.responsiverouter.min.js': ['js/backbone.responsiverouter.js']
+				}
 			}
 		},
 		jshint: {
@@ -19,14 +32,19 @@ module.exports = function(grunt) {
 				jshintrc: true
 			}
 		},
-		copy: {
-			main: {
-				cwd: 'js/',
-				src: '*.js',
-				dest: 'dist/',
-				filter: 'isFile',
-				flatten: true
-			},
+		testem: {
+			env1: {
+				src: [
+					'js/*.js',
+					'test/*.js'
+				],
+				options: {
+					parallel: 8,
+					launch_in_ci: ['PhantomJS'],
+					launch_in_dev: ['Chrome'],
+					test_page: 'test/index.html'
+				}
+			}
 		}
 	});
 
@@ -34,8 +52,13 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-testem');
 	grunt.loadNpmTasks('grunt-release');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
-	grunt.loadNpmTasks('grunt-contrib-copy');
 
-	grunt.registerTask('default', ['jshint', 'copy', 'uglify']);
+	grunt.registerTask('default', ['jshint', 'bump', 'uglify']);
+
+	grunt.registerTask('bump', 'Bumps version nr of pkg.', function(part) {
+		if(!part) part = 'patch';
+		var version = semver.inc(grunt.config.get('pkg.version'), part);
+		grunt.config.set('pkg.version', version);
+	});
 
 };

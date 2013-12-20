@@ -100,7 +100,7 @@
 		options = options || {};
 		// options || (options = {});
 		if (options.routes) this.routes = options.routes;
-		if (options.breakpoints) _.extend(this.breakpoints, options.breakpoints);
+		if (options.breakpoints) this.breakpoints = _.extend(_.clone(this.breakpoints), options.breakpoints);
 		if (options.watch) this._watchBreakPoints();
 		this._bindRoutes();
 		this.media = this.getMatchedMedia();
@@ -108,7 +108,8 @@
 	};
 
 	// Making it possible to extend the ResponsiveRouter further
-	_.extend(ResponsiveRouter, Backbone.Router);
+	// _.extend(ResponsiveRouter, Backbone.Router);
+	ResponsiveRouter.extend = Backbone.Router.extend;
 
 	// Extending the prototype with custom responsive features
 	_.extend(ResponsiveRouter.prototype, Backbone.Router.prototype, {
