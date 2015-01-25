@@ -3,9 +3,9 @@ Backbone.ResponsiveRouter
 
 Maintaind by [Richard Wålander](http://www.richardwalander.com)
 
-Extends the normal [Backbone.js](http://backbonejs.org) Router to include some responsive features to execute different logic based on route and viewport size.
+Extends [Backbone.js](http://backbonejs.org) to give a better MVC pattern and to include some responsive features to execute different logic based on route and viewport size.
 
-Depends on [Underscore](http://underscorejs.org), [Backbone](http://backbonejs.org), and [jQuery](http://jquery.com). You can swap out the dependencies with a custom configuration.
+Depends on [Underscore](http://underscorejs.org), [Backbone](http://backbonejs.org). You can swap out the dependencies with a custom configuration.
 
 Background
 ==========
@@ -17,34 +17,25 @@ So what options do you have if you want the experience to be different on differ
 
 The problem with a non-responsive-desing solution is that you often end up with many different projects/code-bases for different devices and in the end maintenance hell! Another problem is that some of the views work 100% for all sizes and then you don't want to re-implement that in all your versions of your web app.
 
+Using Backbone.Router will also not really give you the structure that you want. If you are building something really big I would recommend using [Backbone.Marionette](http://marionettejs.com/). Marionette also provides a Controller component that works similar to this but without the responsive features. [Have a look here](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.controller.md) 
+
 The solution
 ============
 
-So how can we still use the power of media queries but now for our JavaScript code? To solve this issue especially for `Backbone.js` applications I extended the normal `Backbone.Router` with some responsive features for your to use in your routes to handle different media query break points. With this you can write custom logic or even render completely different views based on viewport size.
+So how can we still use the power of media queries but now for our JavaScript code? To solve this issue especially for `Backbone.js` applications I have created a `Backbone.ResponsiveController`-component with some responsive features for your to use in your application to give better structure and to handle different media query break points. With this you can divide your application in different modules and write custom logic or even render completely different views based on viewport size.
 
 How does it work?
 =================
-The `ResponsiveRouter` uses `window.matchMedia` to match any breakpoints you define for your application. In this way you can use the same breakpoints for responsive CSS3 functionality as well as responsive JavaScript functionality. `window.matchMedia` has fairly good browser support (Chrome since m10, Firefox since 6, and Safari since 5.1, IE10), but the `ResponsiveRouter` includes [polyfills](https://github.com/paulirish/matchMedia.js/) for legacy browsers and IE6-9.
+The `ResponsiveController` the normal `Backbone.Router.route`-method and `window.matchMedia` to match any breakpoints you define for your application. So now you can define route callbacks as objects with callbacks for any query defined instead of sigle callback functions. In this way you can use the same breakpoints for responsive CSS3 functionality as well as responsive JavaScript functionality. `window.matchMedia` has fairly good browser support (Chrome since m10, Firefox since 6, and Safari since 5.1, IE10), but the `ResponsiveController` includes [polyfills](https://github.com/paulirish/matchMedia.js/) for legacy browsers and IE6-9.
 
-When you create a new instance of the `ResponsiveRouter` it will come with some pre-defined breakpoints and it will automatically see witch one is matched. Because I use [Twitter Bootstrap](http://getbootstrap.com) a lot in my applications the default breakpoints try to follow their grid system breakpoints. These are the default breakpoints:
+When you create a new instance of the `ResponsiveController` it will come with some pre-defined queries and it will automatically see witch one is matched. Because I use [Twitter Bootstrap](http://getbootstrap.com) a lot in my applications the default breakpoints try to follow their grid system breakpoints. These are the default breakpoints:
 
  ```javascript
-breakpoints: {
-	'mobile': { //(min-width: 0px) and (max-width: 480px)
-		'start': 0,
-		'end': 480
-	},
-	'tablet': { //(min-width: 481px) and (max-width: 768px)
-		'start': 481,
-		'end': 768
-	},
-	'laptop': { //(min-width: 769px) and (max-width: 1170px)
-		'start': 769,
-		'end': 1170
-	},
-	'desktop': { //(min-width: 1171px)
-	'start': 1171
-	}
+queries: {
+	'mobile': '(min-width: 0px) and (max-width: 480px)',
+	'tablet': '(min-width: 481px) and (max-width: 768px)',
+	'laptop': '(min-width: 769px) and (max-width: 1170px)',
+	'desktop': '(min-width: 1171px)'
 },
  ```
 ### Installation
@@ -56,8 +47,8 @@ If you wish to just get ResponsiveRouter in your project, you need at the minimu
 <script src="underscore.js"></script>
 <script src="backbone.js"></script>
 
-<!-- ResponsiveRouter -->
-<script src="backbone.responsiverouter.js"></script>
+<!-- ResponsiveController -->
+<script src="backbone.responsivecontroller.js"></script>
 ```
 If you want to use a dependency manager like RequireJS.
 
@@ -70,7 +61,7 @@ require.config({
     jquery: "/path/to/jquery",
     backbone: "/path/to/backbone",
     underscore: "/path/to/underscore",
-    responsiverouter: "/path/to/backbone.responsiverouter"
+    responsiverouter: "/path/to/backbone.responsivecontroller"
   },
 
   // Help RequireJS load Backbone with shim.
@@ -87,56 +78,68 @@ Then you can require it and use it.
 
 ```javascript
 define(function (require) {
-	var ResponsiveRouter = require('responsiverouter');
+	var ResponsiveController = require('responsivecontroller');
 	
-	var Router = ResponsiveRouter.extend({
+	var Controller = ResponsiveController({
 		...
 	});
 	
-	return Router;
+	return Controller;
 });
 ```
 
 ### Basic usage
 ```javascript
-var Router = Backbone.ResponsiveRouter.extend({
+var CatsController = Backbone.ResponsiveController.extend({
 ...
-	breakpoints: {
-		'mobile': { //(min-width: 0px) and (max-width: 480px)
-			'start': 0,
-			'end': 480
-		},
-		'tablet': { //(min-width: 481px) and (max-width: 768px)
-			'start': 481,
-			'end': 768
-		},
-		'laptop': { //(min-width: 769px) and (max-width: 1170px)
-			'start': 769,
-			'end': 1170
-		},
-		'desktop': { //(min-width: 1171px)
-		'start': 1171
-		}
-	},
 
 	routes: {
-		"":                 "index",
-		"search/:query":        "search",
+		"cats":                 "index",
+		"cats/search/:query":        "search",
 	},
 	
-	index: function () {
-		if(this.media == 'mobile') {
-			new MobileView();
-		} else {
-			new NormalView();
+	initialize: function() {
+    	// do some init stuff
+  	},
+  	
+  	onBeforeRoute: function(url, param1, param2, ...) {
+    	// called before `#dogs` / `#` routes
+    	// Set some state variables, create controller layout etc
+  	},
+
+  	onAfterRoute: function(url, param1, param2, ...) {
+    	// called after `#dogs` / `#` routes
+  	},
+	
+	index: {
+		mobile: function () {
+			// render mobile view			
+		},
+		default: function () {
+			// will be executed if no other query matches
+			// show list of cats or
+			// show dogs list
+    		// instead of cats
+    		this.navigate('dogs/', {trigger: true});
 		}
 	},
+	
+	remove: functin() {
+    	// cleanup
+  	}
 ...
 });
 
-var router = new Router();
+var Application = Backbone.Router.extend({
+  controllers: {},
 
-Backbone.history.start();
+  initialize: function() {
+    this.controllers.cats = new CatsController({router: this});
+    this.controllers.dogs = new DogsController({router: this});
+
+    Backbone.history.start();
+  }
+});
 ```
 
 ### Advanced usage
