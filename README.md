@@ -28,7 +28,7 @@ How does it work?
 =================
 The `ResponsiveController` the normal `Backbone.Router.route`-method and `window.matchMedia` to match any breakpoints you define for your application. So now you can define route callbacks as objects with callbacks for any query defined instead of sigle callback functions. In this way you can use the same breakpoints for responsive CSS3 functionality as well as responsive JavaScript functionality. `window.matchMedia` has fairly good browser support (Chrome since m10, Firefox since 6, and Safari since 5.1, IE10), but the `ResponsiveController` includes [polyfills](https://github.com/paulirish/matchMedia.js/) for legacy browsers and IE6-9.
 
-When you create a new instance of the `ResponsiveController` it will come with some pre-defined queries and it will automatically see witch one is matched. Because I use [Twitter Bootstrap](http://getbootstrap.com) a lot in my applications the default breakpoints try to follow their grid system breakpoints. These are the default breakpoints:
+When you create a new instance of the `ResponsiveController` it will come with some pre-defined queries and it will automatically see witch one is matched. Because I use [Twitter Bootstrap](http://getbootstrap.com) a lot in my applications, this component will use the default breakpoints to match their grid system breakpoints. These are the default breakpoints:
 
  ```javascript
 queries: {
